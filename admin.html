@@ -13,8 +13,9 @@
   </button>
 
   <p id="status"></p>
-
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <button id="download">Descargar Excel</button>
   <script>
     const SUPABASE_URL = "https://eurobrvauarexooknbpi.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_AuBKM60iM53tjH4ptBGENQ_7MVuBcum";
@@ -36,37 +37,64 @@
   );
 
   document.getElementById("download").addEventListener("click", async () => {
-    const { data, error } = await supabaseAdmin
-      .from("rsvp")
-      .select("name,email,guests,comment,created_at");
+  const { data, error } = await supabaseAdmin
+    .from("invitados")
+    .select("name,email,guests,comment,created_at");
 
-    if (error) {
-      alert("Error al descargar: " + error.message);
-      return;
-    }
-
-    downloadCSV(data);
-  });
-
-  function downloadCSV(rows){
-    const header = ["Nombre","Email","Invitados","Comentario","Fecha"];
-    const csv = [
-      header.join(","),
-      ...rows.map(r => [
-        r.name,
-        r.email,
-        r.guests,
-        `"${(r.comment||"").replace(/"/g,'""')}"`,
-        r.created_at
-      ].join(","))
-    ].join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "invitados.csv";
-    a.click();
+  if(error){
+    alert("Error al descargar: "+error.message);
+    return;
   }
+
+  downloadExcel(data);
+});
+
+  function downloadExcel(rows) {
+  // 1️⃣ Crear array de datos
+  const data = rows.map(r => ({
+    Nombre: r.name,
+    Email: r.email,
+    Invitados: r.guests,
+    Comentario: r.comment,
+    Fecha: r.created_at
+  }));
+
+  // 2️⃣ Crear libro y hoja
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(data, { header: ["Nombre","Email","Invitados","Comentario","Fecha"] });
+
+  // 3️⃣ Formato de header
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for(let C = range.s.c; C <= range.e.c; ++C) {
+    const cell = ws[XLSX.utils.encode_cell({r:0, c:C})];
+    if(!cell.s) cell.s = {};
+    cell.s.font = { bold: true }; // header en negrita
+  }
+
+  // 4️⃣ Ajustar ancho de columnas y wrap text
+  ws['!cols'] = [
+    { wch: 44 }, // Nombre
+    { wch: 44 }, // Email
+    { wch: 44 }, // Invitados
+    { wch: 44 }, // Comentario
+    { wch: 44 }  // Fecha
+  ];
+
+  // Wrap text en todas las celdas
+  for(let R = range.s.r; R <= range.e.r; ++R) {
+    for(let C = range.s.c; C <= range.e.c; ++C) {
+      const cell = ws[XLSX.utils.encode_cell({r:R, c:C})];
+      if(!cell.s) cell.s = {};
+      cell.s.alignment = { wrapText: true };
+    }
+  }
+
+  XLSX.utils.book_append_sheet(wb, ws, "Invitados");
+
+  // 5️⃣ Descargar archivo
+  XLSX.writeFile(wb, "Lista_de_invitados.xlsx");
+}
+
   </script>
 
 </body>
