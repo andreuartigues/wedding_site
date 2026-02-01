@@ -136,9 +136,8 @@ body {
    ============================ */
 .hero {
   margin-top: 80px;
-  padding: 3rem 2rem;
+  padding: 2rem 1rem;
   background: linear-gradient(180deg, var(--cream) 0%, var(--beige) 100%);
-  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,7 +199,7 @@ body {
 }
 
 .welcome-text {
-  text-align: center;
+  text-align: justify;
   font-size: 1.1rem;
   max-width: 750px;
   margin: 0 auto 1.5rem;
@@ -367,8 +366,6 @@ body {
 
 .bank-account {
   padding: 2rem;
-  background: var(--beige);
-  border-radius: 8px;
   margin: 2rem 0;
 }
 
