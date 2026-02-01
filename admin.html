@@ -44,68 +44,81 @@
   downloadExcel(data);
 });
 
-  function downloadExcel(rows) {
+function downloadExcel(rows) {
+
+  if (!rows || rows.length === 0) {
+    alert("No hay invitados registrados todavía");
+    return;
+  }
+
   // 1️⃣ Crear array de datos
   const data = rows.map(r => ({
-    Nombre: r.name,
-    Email: r.email,
-    BusCoche: r.bus,
-    Comentario: r.comment,
-    Fecha: r.created_at
+    Nombre: r.name || "",
+    Email: r.email || "",
+    BusCoche: r.bus || "",
+    Comentario: r.comment || "",
+    Fecha: new Date(r.created_at).toLocaleString()
   }));
 
-  /// 2️⃣ Crear libro y hoja
+  // 2️⃣ Crear libro y hoja
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.json_to_sheet(data, {
     header: ["Nombre","Email","BusCoche","Comentario","Fecha"],
     origin: "A1"
   });
 
-  // 3️⃣ Formato de header en negrita y wrap text
-  const range = XLSX.utils.decode_range(ws['!ref']);
-  for(let C = range.s.c; C <= range.e.c; ++C) {
-    const cell = ws[XLSX.utils.encode_cell({r:0, c:C})];
-    if(!cell.s) cell.s = {};
-    cell.s.font = { bold: true };
-    cell.s.alignment = { wrapText: true };
+  // 🔐 Seguridad: asegurarse que la hoja tiene referencia
+  if (!ws["!ref"]) {
+    alert("No se pudo generar el archivo Excel");
+    return;
   }
 
-  // 4️⃣ Formato de todas las celdas con wrap text
-  for(let R = 1; R <= range.e.r; ++R){
-    for(let C = range.s.c; C <= range.e.c; ++C){
-      const cell = ws[XLSX.utils.encode_cell({r:R, c:C})];
-      if(!cell.s) cell.s = {};
+  // 3️⃣ Formato de header en negrita y wrap text
+  const range = XLSX.utils.decode_range(ws["!ref"]);
+
+  for (let C = range.s.c; C <= range.e.c; ++C) {
+    const cell = ws[XLSX.utils.encode_cell({ r: 0, c: C })];
+    if (cell) {
+      if (!cell.s) cell.s = {};
+      cell.s.font = { bold: true };
       cell.s.alignment = { wrapText: true };
     }
   }
 
-  // 5️⃣ Ajustar ancho de columnas
-  ws['!cols'] = [
-    { wch: 22 }, // Nombre
-    { wch: 22 }, // Email
-    { wch: 22 }, // Invitados
-    { wch: 22 }, // Comentario
-    { wch: 22 }  // Fecha
-  ];
-
-  // 6️⃣ Convertir hoja a tabla (Excel Table) para filtros automáticos
-  ws['!autofilter'] = { ref: ws['!ref'] };
-
-  // 7️⃣ Opcional: conditional formatting (resaltar filas según condición)
-  // SheetJS puro no soporta full Excel conditional formatting
-  // Pero puedes resaltar manualmente, por ejemplo: invitados > 0 en color
-  for(let R = 1; R <= range.e.r; ++R){
-    const cell = ws[XLSX.utils.encode_cell({r:R, c:2})]; // columna Invitados
-    if(cell.v > 0){
-      if(!cell.s) cell.s = {};
-      cell.s.fill = { fgColor: { rgb: "FFFFC0CB" } }; // rosa claro
+  // 4️⃣ Formato de todas las celdas con wrap text
+  for (let R = 1; R <= range.e.r; ++R) {
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cell = ws[XLSX.utils.encode_cell({ r: R, c: C })];
+      if (cell) {
+        if (!cell.s) cell.s = {};
+        cell.s.alignment = { wrapText: true };
+      }
     }
   }
 
-  // 8️⃣ Añadir hoja al libro
-  XLSX.utils.book_append_sheet(wb, ws, "Invitados");
+  // 5️⃣ Ajustar ancho de columnas
+  ws["!cols"] = [
+    { wch: 22 },
+    { wch: 30 },
+    { wch: 15 },
+    { wch: 30 },
+    { wch: 22 }
+  ];
 
-  // 9️⃣ Descargar archivo
+  // 6️⃣ Filtros automáticos
+  ws["!autofilter"] = { ref: ws["!ref"] };
+
+  // 7️⃣ Resaltar filas si BusCoche tiene valor
+  for (let R = 1; R <= range.e.r; ++R) {
+    const cell = ws[XLSX.utils.encode_cell({ r: R, c: 2 })];
+    if (cell && cell.v) {
+      if (!cell.s) cell.s = {};
+      cell.s.fill = { fgColor: { rgb: "FFFFE4E1" } };
+    }
+  }
+
+  // 8️⃣ Añadir hoja y descargar
+  XLSX.utils.book_append_sheet(wb, ws, "Invitados");
   XLSX.writeFile(wb, "Lista_de_invitados.xlsx");
 }
 
