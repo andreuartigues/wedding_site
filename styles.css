@@ -173,11 +173,7 @@ body {
    ============================ */
 .welcome {
   padding: 3rem 2rem;
-background: #fcf0b8;
-background: radial-gradient(circle, rgba(252, 240, 184, 1) 0%, rgba(255, 255, 255, 1) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--white);
 }
 
 .section-header {
@@ -202,32 +198,28 @@ background: radial-gradient(circle, rgba(252, 240, 184, 1) 0%, rgba(255, 255, 25
   border-radius: 2px;
 }
 
-/* Box con border ondulado */
+/* Box con border ondulado sutil y transparente */
 .welcome-box {
   max-width: 750px;
   margin: 0 auto 2rem;
-  padding: 2rem 2.5rem;
-  border-radius: 20px;
-  position: relative;
+  padding: 1rem 4rem;
 }
 
 .welcome-box::before {
   content: '';
   position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  border-radius: 20px;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    var(--sage) 10px,
-    var(--sage) 11px
-  );
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  background: linear-gradient(45deg, 
+    rgba(156, 175, 136, 0.3) 0%, 
+    rgba(107, 124, 89, 0.2) 50%, 
+    rgba(156, 175, 136, 0.3) 100%);
   z-index: -1;
-  opacity: 0.3;
+  opacity: 0.4;
+  filter: blur(1px);
 }
 
 .welcome-text {
@@ -400,7 +392,7 @@ background: radial-gradient(circle, rgba(252, 240, 184, 1) 0%, rgba(255, 255, 25
 }
 
 .bank-account {
-  padding:0rem;
+  padding: 2rem;
   margin: 2rem 0;
 }
 
@@ -414,10 +406,10 @@ background: radial-gradient(circle, rgba(252, 240, 184, 1) 0%, rgba(255, 255, 25
 
 .iban-number {
   font-family: 'Courier New', monospace;
-  font-size: 1rem;
+  font-size: 1.3rem;
   color: var(--dark-brown);
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .gifts-footer {
@@ -523,146 +515,179 @@ footer p {
 }
 
 /* ============================
-   CRONOGRAMA VISUAL - TIMELINE SIN BOXES
+   CRONOGRAMA VISUAL - LÍNEA SERPENTEANTE EXACTA
    ============================ */
 .timeline-section {
   padding: 3rem 2rem;
   background: var(--white);
 }
 
-.event-timeline {
+.event-timeline-serpentine {
   position: relative;
-  max-width: 1000px;
-  margin: 2rem auto 0;
-  padding: 1rem 0;
+  max-width: 700px;
+  margin: 3rem auto 0;
+  padding: 2rem 0;
 }
 
-/* Línea vertical central */
-.event-timeline::before {
-  content: '';
+/* SVG de línea serpenteante de fondo */
+.serpentine-line {
   position: absolute;
-  left: 50%;
   top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--sage), var(--olive));
+  left: 50%;
   transform: translateX(-50%);
-  border-radius: 4px;
+  width: 200px;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.9;
 }
 
-/* Items del timeline - SIN BOXES */
-.event-item {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
+/* Cada evento en vertical */
+.serpentine-event {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4rem;
+  z-index: 1;
 }
 
-/* Contenido del evento - SIN BORDER NI BACKGROUND */
-.event-content {
-  background: transparent;
-  padding: 1rem 2rem;
+.serpentine-event:last-child {
+  margin-bottom: 2rem;
+}
+
+/* Contenido del evento - centrado */
+.serpentine-content {
+  background: var(--white);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  border: 2px solid var(--beige);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
   transition: all 0.3s ease;
 }
 
-.event-content:hover {
-  transform: translateX(-5px);
+.serpentine-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: var(--sage);
 }
 
-.event-time {
+.serpentine-content .event-time {
   font-family: var(--font-serif);
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--olive);
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  display: block;
 }
 
-.event-content h3 {
+.serpentine-content h3 {
   font-family: var(--font-serif);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--dark-brown);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
-.event-content p {
+.serpentine-content p {
   color: var(--brown);
-  line-height: 1.6;
-  font-size: 1rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
 }
 
-/* Punto central */
-.event-dot {
-  width: 24px;
-  height: 24px;
-  background: var(--olive);
-  border: 4px solid var(--white);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px var(--beige);
-  position: relative;
-  z-index: 10;
-  align-self: start;
+/* Imágenes en el timeline */
+.serpentine-content .event-image-placeholder {
   margin-top: 1.5rem;
-}
-
-/* Spacer para alternar lados */
-.event-spacer {
-  /* Espacio vacío para el lado contrario */
-}
-
-/* Items a la izquierda */
-.event-item.left .event-content {
-  grid-column: 1;
-  text-align: right;
-}
-
-.event-item.left .event-dot {
-  grid-column: 2;
-}
-
-.event-item.left .event-content:hover {
-  transform: translateX(-5px);
-}
-
-/* Items a la derecha */
-.event-item.right .event-content {
-  grid-column: 3;
-  text-align: left;
-}
-
-.event-item.right .event-dot {
-  grid-column: 2;
-}
-
-.event-item.right .event-content:hover {
-  transform: translateX(5px);
-}
-
-/* Placeholder para imagen */
-.event-image-placeholder {
-  margin-top: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   background: var(--beige);
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.event-img {
+.serpentine-content .event-img {
   width: 100%;
   height: auto;
   object-fit: cover;
-  max-height: 250px;
+  max-height: 300px;
+  display: block;
 }
 
-/* Si no hay imagen */
-.event-image-placeholder:empty::after {
-  content: '📷 Imagen de la iglesia';
-  color: var(--brown);
-  font-size: 1rem;
+/* RESPONSIVE - MÓVIL */
+@media (max-width: 768px) {
+  .timeline-section {
+    padding: 2rem 1rem;
+  }
+
+  .event-timeline-serpentine {
+    padding: 1rem 0;
+    max-width: 100%;
+  }
+
+  .serpentine-line {
+    width: 150px;
+  }
+
+  .serpentine-event {
+    margin-bottom: 3.5rem;
+  }
+
+  .serpentine-content {
+    padding: 1.5rem 1.5rem;
+    max-width: 90%;
+  }
+
+  .serpentine-content .event-time {
+    font-size: 1.6rem;
+  }
+
+  .serpentine-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .serpentine-content p {
+    font-size: 1rem;
+  }
+
+  .serpentine-content .event-img {
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .event-timeline-serpentine {
+    margin-top: 2rem;
+  }
+
+  .serpentine-line {
+    width: 120px;
+  }
+
+  .serpentine-event {
+    margin-bottom: 3rem;
+  }
+
+  .serpentine-content {
+    padding: 1.2rem 1.2rem;
+  }
+
+  .serpentine-content .event-time {
+    font-size: 1.4rem;
+  }
+
+  .serpentine-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .serpentine-content p {
+    font-size: 0.95rem;
+  }
+
+  .serpentine-content .event-img {
+    max-height: 180px;
+  }
 }
 
 /* ============================
@@ -704,6 +729,11 @@ footer p {
 
   .welcome-box {
     padding: 1.5rem 1.5rem;
+    border-radius: 225px 15px 200px 15px/15px 200px 15px 225px;
+  }
+
+  .welcome-box::before {
+    border-radius: 225px 15px 200px 15px/15px 200px 15px 225px;
   }
 
   .section-header h2 {
@@ -743,63 +773,6 @@ footer p {
     flex-direction: column;
     align-items: center;
   }
-
-  /* TIMELINE RESPONSIVE */
-  .timeline-section {
-    padding: 2rem 1rem;
-  }
-
-  .event-timeline {
-    padding: 0.5rem 0;
-  }
-
-  .event-timeline::before {
-    left: 20px;
-  }
-  
-  .event-item {
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .event-item.left,
-  .event-item.right {
-    grid-template-columns: auto 1fr;
-  }
-  
-  .event-item.left .event-content,
-  .event-item.right .event-content {
-    grid-column: 2;
-    text-align: left;
-    padding: 0.5rem 1rem;
-  }
-  
-  .event-item.left .event-dot,
-  .event-item.right .event-dot {
-    grid-column: 1;
-  }
-
-  .event-item.left .event-content:hover,
-  .event-item.right .event-content:hover {
-    transform: translateX(0);
-  }
-  
-  .event-spacer {
-    display: none;
-  }
-
-  .event-time {
-    font-size: 1.4rem;
-  }
-
-  .event-content h3 {
-    font-size: 1.2rem;
-  }
-
-  .event-content p {
-    font-size: 0.95rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -821,27 +794,13 @@ footer p {
 
   .welcome-box {
     padding: 1.2rem 1rem;
-    border-width: 2px;
+  }
+
+  .welcome-box::before {
+    border-radius: 200px 12px 180px 12px/12px 180px 12px 200px;
   }
 
   .date-day {
     font-size: 2rem;
-  }
-
-  .event-timeline::before {
-    left: 15px;
-  }
-
-  .event-dot {
-    width: 18px;
-    height: 18px;
-  }
-
-  .event-time {
-    font-size: 1.2rem;
-  }
-
-  .event-content h3 {
-    font-size: 1.1rem;
   }
 }

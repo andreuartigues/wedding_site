@@ -80,23 +80,35 @@
         <div class="decorative-line"></div>
       </div>
 
-      <div class="event-timeline">
-        <!-- Evento 1 - Izquierda -->
-        <div class="event-item left">
-          <div class="event-content">
+      <div class="event-timeline-serpentine">
+        <!-- SVG de línea serpenteante con degradado -->
+        <svg class="serpentine-line" viewBox="0 0 200 2000" preserveAspectRatio="xMidYMin meet">
+          <defs>
+            <linearGradient id="serpentineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#6b7c59;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#8b7355;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#5d4e37;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path d="M 100 0 Q 150 140 100 280 Q 50 420 100 560 Q 150 700 100 840 Q 50 980 100 1120 Q 150 1260 100 1400 Q 50 1540 100 1680 Q 150 1840 100 2000" 
+                stroke="url(#serpentineGradient)" 
+                stroke-width="8" 
+                fill="none" 
+                stroke-linecap="round"/>
+        </svg>
+
+        <!-- Evento 1 -->
+        <div class="serpentine-event">
+          <div class="serpentine-content">
             <div class="event-time">11:30h</div>
             <h3>Sortida Bus des de Palma</h3>
             <p>Punt de trobada: Plaça Espanya</p>
           </div>
-          <div class="event-dot"></div>
-          <div class="event-spacer"></div>
         </div>
 
-        <!-- Evento 2 - Derecha -->
-        <div class="event-item right">
-          <div class="event-spacer"></div>
-          <div class="event-dot"></div>
-          <div class="event-content">
+        <!-- Evento 2 -->
+        <div class="serpentine-event">
+          <div class="serpentine-content">
             <div class="event-time">12:00h</div>
             <h3>Ceremònia - Església de Muro</h3>
             <p>Parròquia de Sant Joan Baptista</p>
@@ -106,25 +118,21 @@
           </div>
         </div>
 
-        <!-- Evento 3 - Izquierda -->
-        <div class="event-item left">
-          <div class="event-content">
+        <!-- Evento 3 -->
+        <div class="serpentine-event">
+          <div class="serpentine-content">
             <div class="event-time">13:00h</div>
             <h3>Arribada a Son Parera</h3>
             <p>Còctel de benvinguda i celebració</p>
             <div class="event-image-placeholder">
-              <img src="sonparera.jfif" alt="SonParera" class="event-img">
+              <img src="sonparera.jfif" alt="Son Parera" class="event-img">
             </div>
           </div>
-          <div class="event-dot"></div>
-          <div class="event-spacer"></div>
         </div>
 
-        <!-- Evento 4 - Derecha -->
-        <div class="event-item right">
-          <div class="event-spacer"></div>
-          <div class="event-dot"></div>
-          <div class="event-content">
+        <!-- Evento 4 -->
+        <div class="serpentine-event">
+          <div class="serpentine-content">
             <div class="event-time">00:00h</div>
             <h3>Tornada a Palma</h3>
             <p>Bus de tornada cap a Palma</p>
